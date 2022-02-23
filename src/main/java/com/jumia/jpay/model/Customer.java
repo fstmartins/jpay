@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
-public class PhoneNumber {
+public class Customer {
 
     @Id
     private long id;
