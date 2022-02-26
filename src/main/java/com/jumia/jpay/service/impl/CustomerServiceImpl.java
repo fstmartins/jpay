@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -37,6 +35,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<Customer> filterByState() {
-        return null;
+        List<Customer> customers = repository.findAll();
+        List<Country> countries = Arrays.asList(Country.values());
+        List<Customer> validCustomers = new ArrayList<>();
+        List<Customer> invalidCustomers = new ArrayList<>();
+        for (Customer customer: customers) {
+            Optional<Country> countryOptional = countries.stream()
+                    .filter(country -> customer.getPhone().matches(country.prefix))
+                    .findAny();
+            if (countryOptional.isPresent()){
+                validCustomers.add(customer);
+            } else {
+                invalidCustomers.add(customer);
+            }
+        }
+        return invalidCustomers;
     }
 }
