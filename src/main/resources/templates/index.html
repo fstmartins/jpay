@@ -2,29 +2,76 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
-    <link data-th-href="@{/css/main.css?{id}(id=${timestamp})}" rel="stylesheet">
-    <title>Hello Docker + Spring Boot</title>
+    <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+</head>
+    <title>JPay</title>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-md navbar-blue bg-dark fixed-top">
-    <a class="navbar-brand" href="#">Fábio Martins - Java Exercise</div></a>
-</nav>
+    <style>
+        body {
+          padding-top: 5rem;
+        }
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        #data-table {
+          height: 500px;
+          width: 100%;
+        }
+    </style>
 
 <main role="main" class="container">
     <div class="starter-template">
         <h1 th:text="${title}">Default title.</h1>
         <p th:text="${msg}">Default text.</p>
     </div>
-    <div class="dropdown">
-        <select id="selectPhone" name="phone">
-        </select>
+    <div class="table">
+        <div id="data-table" class="ag-theme-balham">
         </div>
+
+    </div>
     </div>
 </main>
 
-<script data-th-src="@{/js/main.js}"></script>
+<script type="text/javascript" charset="utf-8">
+    const columnDefs = [
+            { field: 'id' },
+            { field: 'name' },
+            { field: 'phone' },
+        ];
+
+        const gridOptions = {
+            defaultColDef: {
+                sortable: true,
+                filter: 'agTextColumnFilter',
+                resizable: true
+            },
+
+            pagination: true,
+            paginationPageSize: 15,
+
+            columnDefs: columnDefs,
+            onGridReady: (event) =>{renderDataInTheTable(event.api)}
+        };
+
+        const eGridDiv = document.getElementById('data-table');
+        new agGrid.Grid(eGridDiv, gridOptions);
+
+        function renderDataInTheTable(api) {
+            fetch('http://localhost:8080/client-api/phone-numbers')
+                .then(function (response) {
+                    return response.json();
+                }).then(function (data) {
+                    api.setRowData(data);
+                    api.sizeColumnsToFit();
+                })
+        }
+</script>
 </body>
 
 </html>

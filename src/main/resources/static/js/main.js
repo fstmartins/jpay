@@ -1,11 +1,4 @@
-let dropdown = document.getElementById('selectPhone');
-dropdown.length = 0;
-
-let defaultOption = document.createElement('option');
-defaultOption.text = 'Choose Phone Number';
-
-dropdown.add(defaultOption);
-dropdown.selectedIndex = 0;
+import * as grid from "https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js";
 
 const url = 'http://localhost:8080/client-api/phone-numbers';
 
@@ -14,17 +7,36 @@ request.open('GET', url, true);
 
 request.onload = function() {
   if (request.status === 200) {
-    const data = JSON.parse(request.responseText);
-    let option;
-    for (let i = 0; i < data.length; i++) {
-      option = document.createElement('option');
-      option.text = data[i].phone;
-      option.value = data[i].abbreviation;
-      dropdown.add(option);
-    }
+    const phones = JSON.parse(request.responseText);
+    renderDataInTable(phones);
    } else {
     // Reached the server, but it returned an error
   }   
+}
+
+const columnDefs = [
+  { field: 'id' },
+  { field: 'name' },
+  { field: 'number' },
+];
+
+const gridOptions = {
+  columnDefs: columnDefs,
+  onGridReady: (event) =>{renderDataInTheTable(event.api)}
+};
+
+const eGridDiv = document.getElementById('data-table');
+        new grid.agGrid.Grid(eGridDiv, gridOptions);
+
+
+function renderDataInTable(phones) {
+  fetch(url)
+    .then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      api.setRowData(data);
+      api.sizeColumnsToFit();
+    });
 }
 
 request.onerror = function() {
@@ -35,15 +47,7 @@ request.send();
 
 // Close the dropdown menu if the user clicks outside of it
 window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
+  //do nothing
+ 
 }
 
