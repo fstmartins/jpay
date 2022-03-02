@@ -2,6 +2,8 @@ package com.jumia.jpay.rest;
 
 import com.jumia.jpay.model.Country;
 import com.jumia.jpay.model.Customer;
+import com.jumia.jpay.model.CustomerResponseBody;
+import com.jumia.jpay.model.State;
 import com.jumia.jpay.service.impl.CustomerServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -20,8 +22,8 @@ public class CustomerController {
     private CustomerServiceImpl phoneNumberService;
 
     @GetMapping("/client-api/phone-numbers")
-    public List<Customer> getAllNumbers(@RequestParam(required = false) Country country) {
-        return Objects.isNull(country) ? phoneNumberService.listAll() : phoneNumberService.filterByCountry(country);
+    public List<CustomerResponseBody> getAllNumbers(@RequestParam(required = false) Country country, @RequestParam(required = false, defaultValue = "NOT_DEFINED") State state) {
+        return phoneNumberService.listAll(country, state);
     }
 
     @GetMapping("/")
@@ -33,8 +35,4 @@ public class CustomerController {
         return modelAndView;
     }
 
-    @GetMapping("/client-api/phone-numbers/invalid")
-    public List<Customer> getInvalid(){
-        return phoneNumberService.filterByState();
-    }
 }

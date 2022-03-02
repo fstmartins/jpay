@@ -30,9 +30,28 @@
         <h1 th:text="${title}">Default title.</h1>
         <p th:text="${msg}">Default text.</p>
     </div>
+    <div class="dropdown">
+            <select onchange="chooseCountry(this)">
+                <option value="">Select Country</option>
+                <option value="CAMEROON">CAMEROON</option>
+                <option value="ETHIOPIA">ETHIOPIA</option>
+                <option value="MOROCCO">MOROCCO</option>
+                <option value="MOZAMBIQUE">MOZAMBIQUE</option>
+                <option value="UGANDA">UGANDA</option>
+                </select>                
+      </div>
+      <p></p>
+      <div class="dropdown">
+        <select onchange="chooseState(this)">
+            <option value="">Select State</option>
+            <option value="VALID">Valid</option>
+            <option value="NOT_VALID">Not Valid</option>
+            </select>                
+  </div>
+  <p></p>
     <div class="table">
         <div id="data-table" class="ag-theme-balham">
-        </div>
+        </div>  
 
     </div>
     </div>
@@ -43,9 +62,16 @@
             { field: 'id' },
             { field: 'name' },
             { field: 'phone' },
+            { field: 'country' },
+            { field: 'state' },
         ];
 
-        const gridOptions = {
+        let country = '';
+        let state = '';
+        let apic;
+        let host = location.protocol.concat("//").concat(window.location.host);
+
+        let gridOptions = {
             defaultColDef: {
                 sortable: true,
                 filter: 'agTextColumnFilter',
@@ -56,21 +82,67 @@
             paginationPageSize: 15,
 
             columnDefs: columnDefs,
-            onGridReady: (event) =>{renderDataInTheTable(event.api)}
+            onGridReady: (event) =>{
+                apic = event.api;
+                renderDataInTheTable(event.api)}
         };
 
+    
         const eGridDiv = document.getElementById('data-table');
         new agGrid.Grid(eGridDiv, gridOptions);
 
         function renderDataInTheTable(api) {
-            fetch('http://localhost:8080/client-api/phone-numbers')
-                .then(function (response) {
-                    return response.json();
-                }).then(function (data) {
-                    api.setRowData(data);
-                    api.sizeColumnsToFit();
-                })
+            let params = new URLSearchParams({})
+            if (state == '' && country == '') {
+                fetch(host.concat('/client-api/phone-numbers'))
+                    .then(function (response) {
+                        console.log(response);
+                        return response.json();
+                    }).then(function (data) {
+                        console.log(data);
+                        api.setRowData(data);
+                        api.sizeColumnsToFit();
+                    })
+            } else {
+                let params;
+                if (country == '') {
+                    params = new URLSearchParams({
+                        state: state
+                    });
+                } else if (state == '') {
+                    params = new URLSearchParams({
+                        country: country
+                    })
+                } else {
+                    params = new URLSearchParams({
+                        country: country,
+                        state: state
+                    })
+                }
+
+                fetch(host.concat('/client-api/phone-numbers?').concat(params))
+                    .then(function (response) {
+                        console.log(response);
+                        return response.json();
+                    }).then(function (data) {
+                        console.log(data);
+                        api.setRowData(data);
+                        api.sizeColumnsToFit();
+                    })
+            }
         }
+
+
+    function chooseCountry(dropdown) {
+        country = dropdown.options[dropdown.selectedIndex].value;
+        renderDataInTheTable(apic);
+    }
+
+    function chooseState(dropdown) {
+        state = dropdown.options[dropdown.selectedIndex].value;
+        renderDataInTheTable(apic);
+    }
+
 </script>
 </body>
 
