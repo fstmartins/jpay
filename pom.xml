@@ -26,7 +26,7 @@
         <xerial.sqlite.version>3.25.2</xerial.sqlite.version>
         <zsoltfabok.sqlite.dialect.version>1.0</zsoltfabok.sqlite.dialect.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
-        <junit.jupiter.version>5.8.1</junit.jupiter.version>
+        <junit4.version>4.12</junit4.version>
         <mockito.version>1.10.19</mockito.version>
         <mvn.compiler.version>3.8.0</mvn.compiler.version>
     </properties>
@@ -75,16 +75,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit4.version}</version>
             <scope>test</scope>
         </dependency>
 
