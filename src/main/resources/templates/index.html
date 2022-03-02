@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <script src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.noStyle.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-balham.css">
+</head>
+    <title>JPay</title>
+</head>
+<body>
+
+    <style>
+        body {
+          padding-top: 5rem;
+        }
+        .starter-template {
+          padding: 3rem 1.5rem;
+          text-align: center;
+        }
+
+        #data-table {
+          height: 500px;
+          width: 100%;
+        }
+    </style>
+
+<main role="main" class="container">
+    <div class="starter-template">
+        <h1 th:text="${title}">Default title.</h1>
+        <p th:text="${msg}">Default text.</p>
+    </div>
+    <div class="dropdown">
+            <select onchange="chooseCountry(this)">
+                <option value="">Select Country</option>
+                <option value="CAMEROON">CAMEROON</option>
+                <option value="ETHIOPIA">ETHIOPIA</option>
+                <option value="MOROCCO">MOROCCO</option>
+                <option value="MOZAMBIQUE">MOZAMBIQUE</option>
+                <option value="UGANDA">UGANDA</option>
+                </select>                
+      </div>
+      <p></p>
+      <div class="dropdown">
+        <select onchange="chooseState(this)">
+            <option value="">Select State</option>
+            <option value="VALID">Valid</option>
+            <option value="NOT_VALID">Not Valid</option>
+            </select>                
+  </div>
+  <p></p>
+    <div class="table">
+        <div id="data-table" class="ag-theme-balham">
+        </div>  
+
+    </div>
+    </div>
+</main>
+
+<script type="text/javascript" charset="utf-8">
+    const columnDefs = [
+            { field: 'id' },
+            { field: 'name' },
+            { field: 'phone' },
+            { field: 'country' },
+            { field: 'state' },
+        ];
+
+        let country = '';
+        let state = '';
+        let apic;
+        let host = location.protocol.concat("//").concat(window.location.host);
+
+        let gridOptions = {
+            defaultColDef: {
+                sortable: true,
+                filter: 'agTextColumnFilter',
+                resizable: true
+            },
+
+            pagination: true,
+            paginationPageSize: 15,
+
+            columnDefs: columnDefs,
+            onGridReady: (event) =>{
+                apic = event.api;
+                renderDataInTheTable(event.api)}
+        };
+
+    
+        const eGridDiv = document.getElementById('data-table');
+        new agGrid.Grid(eGridDiv, gridOptions);
+
+        function renderDataInTheTable(api) {
+            let params = new URLSearchParams({})
+            if (state == '' && country == '') {
+                fetch(host.concat('/client-api/phone-numbers'))
+                    .then(function (response) {
+                        console.log(response);
+                        return response.json();
+                    }).then(function (data) {
+                        console.log(data);
+                        api.setRowData(data);
+                        api.sizeColumnsToFit();
+                    })
+            } else {
+                let params;
+                if (country == '') {
+                    params = new URLSearchParams({
+                        state: state
+                    });
+                } else if (state == '') {
+                    params = new URLSearchParams({
+                        country: country
+                    })
+                } else {
+                    params = new URLSearchParams({
+                        country: country,
+                        state: state
+                    })
+                }
+
+                fetch(host.concat('/client-api/phone-numbers?').concat(params))
+                    .then(function (response) {
+                        console.log(response);
+                        return response.json();
+                    }).then(function (data) {
+                        console.log(data);
+                        api.setRowData(data);
+                        api.sizeColumnsToFit();
+                    })
+            }
+        }
+
+
+    function chooseCountry(dropdown) {
+        country = dropdown.options[dropdown.selectedIndex].value;
+        renderDataInTheTable(apic);
+    }
+
+    function chooseState(dropdown) {
+        state = dropdown.options[dropdown.selectedIndex].value;
+        renderDataInTheTable(apic);
+    }
+
+</script>
+</body>
+
+</html>
