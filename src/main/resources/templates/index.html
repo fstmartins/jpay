@@ -23,6 +23,10 @@
           height: 500px;
           width: 100%;
         }
+
+        .dropdown {
+        display: inline-flex;
+        }
     </style>
 
 <main role="main" class="container">
@@ -30,6 +34,7 @@
         <h1 th:text="${title}">Default title.</h1>
         <p th:text="${msg}">Default text.</p>
     </div>
+    <div class="parent">
     <div class="dropdown">
             <select onchange="chooseCountry(this)">
                 <option value="">All countries</option>
@@ -40,14 +45,14 @@
                 <option value="UGANDA">UGANDA</option>
                 </select>                
       </div>
-      <p></p>
-      <div class="dropdown">
+    <div class="dropdown">
         <select onchange="chooseState(this)">
             <option value="">All states</option>
             <option value="VALID">Valid</option>
             <option value="NOT_VALID">Not Valid</option>
             </select>                
   </div>
+    </div>
   <p></p>
     <div class="table">
         <div id="data-table" class="ag-theme-balham">
@@ -122,10 +127,8 @@
 
                 fetch(host.concat('/client-api/phone-numbers?').concat(params))
                     .then(function (response) {
-                        console.log(response);
                         return response.json();
                     }).then(function (data) {
-                        console.log(data);
                         api.setRowData(data);
                         api.sizeColumnsToFit();
                     })
