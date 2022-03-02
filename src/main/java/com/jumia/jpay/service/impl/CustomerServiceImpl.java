@@ -88,7 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
         log.debug("CustomerServiceImpl: setting state as {} and country as {}", customerResponseBody.getState(), customerResponseBody.getCountry());
     }
 
-    public List<CustomerResponseBody> filterByCountry(List<Customer> customers, Country country) {
+    private List<CustomerResponseBody> filterByCountry(List<Customer> customers, Country country) {
         log.debug("CustomerServiceImpl.filterByCountry()");
         List<CustomerResponseBody> filteredCustomers = new LinkedList<>();
         for (Customer customer : customers) {
@@ -105,7 +105,7 @@ public class CustomerServiceImpl implements CustomerService {
         return filteredCustomers;
     }
 
-    public List<CustomerResponseBody> filterByState(List<Customer> customers, State state) {
+    private List<CustomerResponseBody> filterByState(List<Customer> customers, State state) {
         log.debug("CustomerServiceImpl.filterByState()");
         if (state.equals(State.NOT_DEFINED)) {
             log.debug("CustomerServiceImpl: filter by state: state is not defined");
