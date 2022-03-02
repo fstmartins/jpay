@@ -26,7 +26,7 @@
         <xerial.sqlite.version>3.25.2</xerial.sqlite.version>
         <zsoltfabok.sqlite.dialect.version>1.0</zsoltfabok.sqlite.dialect.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
-        <junit4.version>4.12</junit4.version>
+        <junit4.version>4.13.1</junit4.version>
         <mockito.version>1.10.19</mockito.version>
         <mvn.compiler.version>3.8.0</mvn.compiler.version>
     </properties>
