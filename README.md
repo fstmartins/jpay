@@ -1,12 +1,12 @@
 # JPAY Phone Number Exercise
 
 This is a sample project of a simple webpage that serves data about users phone number's information.
-The backend of the project was made using Java and SpringBoot, using SQLite as database.
+The backend of the project was made using Java11 and SpringBoot, using SQLite as database.
 The frontend of the project consists on a simple page created using html, css and javascript.
 
 
 ### Start the project
-To be able to start the project, Apache Maven should be installed, and a Docker daemon should be running.
+To be able to start the project, Java 11 and Apache Maven should be installed, and a Docker daemon should be running.
 
 
 Open a terminal and navigate to the project main folder and then execute one of the following approaches:
