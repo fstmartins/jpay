@@ -1,6 +1,3 @@
-# For Java 8, try this
-# FROM openjdk:8-jdk-alpine
-
 # Preparing the tomcat for deployment
 FROM tomcat:9.0.64-jre11-openjdk-slim-bullseye
 
@@ -15,7 +12,7 @@ ARG JAR_FILE=target/spring-boot-web.jar
 WORKDIR /opt/app
 
 # cp target/spring-boot-web.jar /opt/app/app.jar
-COPY ${JAR_FILE} app.jar
+COPY $JAR_FILE app.jar
 
 # java -jar /opt/app/app.jar
 ENTRYPOINT ["java","-jar","app.jar"]
