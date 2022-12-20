@@ -1,8 +1,8 @@
 # For Java 8, try this
 # FROM openjdk:8-jdk-alpine
 
-# For Java 11, try this
-FROM adoptopenjdk/openjdk11:alpine-jre
+# Preparing the tomcat for deployment
+FROM tomcat:9.0.64-jre11-openjdk-slim-bullseye
 
 # Add SQLite db
 COPY jpay.db /opt/app/jpay.db
